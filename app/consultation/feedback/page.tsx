@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Star, MessageSquare } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -18,7 +18,7 @@ interface Consultation {
   type: string
 }
 
-export default function FeedbackPage() {
+function FeedbackContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const consultationId = searchParams.get("id") || ""
@@ -126,5 +126,22 @@ export default function FeedbackPage() {
         </Button>
       </div>
     </div>
+  )
+}
+
+export default function FeedbackPage() {
+  return (
+    <Suspense fallback={
+      <div className="relative min-h-screen bg-gradient-to-br from-background via-primary/5 to-secondary/10 p-6">
+        <div className="mx-auto max-w-md">
+          <div className="mb-8 text-center">
+            <h1 className="mb-2 text-2xl font-bold text-foreground">Rate Your Experience</h1>
+            <p className="text-muted-foreground">Loading...</p>
+          </div>
+        </div>
+      </div>
+    }>
+      <FeedbackContent />
+    </Suspense>
   )
 }
